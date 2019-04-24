@@ -64,29 +64,29 @@ void read_results(const Results& r) {
          << "\nmedian= " << r.median
          << "\nmean= " << r.mean;
 }
+void print_vector(const vector<double>& v) {
+    // printing vector - Begin
+    cout << "{";
+    for (int i = 0; i < v.size(); ++i) {
+        if (i != v.size()-1) {
+            cout << v[i] << ", ";
+        }
+    }
+    cout << v[v.size()-1] << "}";
+    // printing vector - End
+
+}
+
 
 int main() {
     vector<double>price{0.12, 0.05, 0.2, 0.421, 0.114, 0.47, 0.11, 40.95 }; // input vector
+    // printing vector
+    print_vector(price);
 
-    // printing vector - Begin
-    cout << "{";
-    for (int i = 0; i < price.size(); ++i) {
-        if (i != price.size()-1) {
-            cout << price[i] << ", ";
-        }
-    }
-    cout << price[price.size()-1] << "}";
-    // printing vector - End
-
-    // Method 1: assigning results to a struct "r" :
-    // assigning computed results to struct r
+    // Method 1: assigning computed results to a struct "r" :
     Results r = compute_results(price);
-
     // printing results from struct r
-    cout << "\nsmallest= " << r.smallest
-         << "\nlargest= " << r.largest
-         << "\nmedian= " << r.median
-         << "\nmean= " << r.mean;
+    read_results(r);
 
     // Method 2: passing back results through reference arguments
     Results x(0,0,0,0); // initializing a Results object

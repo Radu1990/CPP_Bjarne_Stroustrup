@@ -10,9 +10,10 @@ public:
     Results(double s, double l, double me, double md)
     :smallest(s), largest(l), mean(me), median(md)  {}
 };
+
 //------------------------------------------------------------------
-// This function returns a struct of
-// type Results containing all the values
+// Returns a struct of type 'Results'
+// containing all the values
 Results compute_results(const vector<double>& v) {
     // sort the vector's elements
     vector<double>n = v; // n = new_vector
@@ -33,9 +34,10 @@ Results compute_results(const vector<double>& v) {
     // returning struct containing results
     return Results{smallest, largest, mean, median};
 }
+
 //------------------------------------------------------------------
-// This function returns nothing but changes
-// the values directly through reference arguments
+// Returns nothing but changes the values
+// directly through reference arguments
 void compute_results_2(const vector<double>& v, Results& r) {
     // sort the vector's elements
     vector<double>n = v; // n = new_vector
@@ -55,8 +57,9 @@ void compute_results_2(const vector<double>& v, Results& r) {
     r.mean = n[(n.size()-1) / 2];
     r.median = median; // values will be added later
 }
+
 //------------------------------------------------------------------
-// This function reads the values from a Result object
+// Reads the values from a 'Results' object
 void read_results(const Results& r) {
     // printing results from struct r
     cout << "\nsmallest= " << r.smallest
@@ -64,6 +67,9 @@ void read_results(const Results& r) {
          << "\nmedian= " << r.median
          << "\nmean= " << r.mean;
 }
+
+//------------------------------------------------------------------
+// Prints the vector out
 void print_vector(const vector<double>& v) {
     // printing vector - Begin
     cout << "{";
@@ -74,14 +80,34 @@ void print_vector(const vector<double>& v) {
     }
     cout << v[v.size()-1] << "}";
     // printing vector - End
-
 }
 
+//------------------------------------------------------------------
+// prints the elements of a vector
+// until it matches a keyword 'quit' the 2nd time
+void print_until_ss(const vector<double>& v, double quit) {
+    int o = 0; // occurrence
+
+    for (const double& s:v) {
+        if (s == quit) {
+            o += 1;
+        }
+        if (o == 2) {
+            cout << s << " occurred 2 times! Abort mission...\n";
+            return;
+        }
+        cout << s << '\n';
+    }
+}
+//------------------------------------------------------------------
 
 int main() {
-    vector<double>price{0.12, 0.05, 0.2, 0.421, 0.114, 0.47, 0.11, 40.95 }; // input vector
+    // input vector
+    vector<double>price{0.12, 0.05, 0.2, 0.421, 0.2, 0.114, 0.47, 0.11, 40.95 };
     // printing vector
     print_vector(price);
+    // prints and aborts if element repeats
+    print_until_ss(price, 0.2);
 
     // Method 1: assigning computed results to a struct "r" :
     Results r = compute_results(price);
@@ -96,5 +122,4 @@ int main() {
     compute_results_2(price, x);
     // reading results from object 'x'
     read_results(x);
-
 }

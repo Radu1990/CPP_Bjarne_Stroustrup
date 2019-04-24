@@ -89,8 +89,12 @@ int main() {
     read_results(r);
 
     // Method 2: passing back results through reference arguments
-    Results x(0,0,0,0); // initializing a Results object
-    compute_results_2(price, x); // input is price vector from upstairs and x object
-    read_results(x); // reading results from x object
+    // initializing a Results object called 'x'
+    Results x(0,0,0,0);
+    // input is price vector from upstairs
+    // and results are written in object 'x'
+    compute_results_2(price, x);
+    // reading results from object 'x'
+    read_results(x);
 
 }

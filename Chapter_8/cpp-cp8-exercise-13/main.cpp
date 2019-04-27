@@ -90,7 +90,6 @@ void print_vec_str(const vector<string>& v) {
     }
 }
 
-
 int main() {
     ///
     vector<string>example{"gfk", "geeksforgeeks", "tatacalurulez", "survival", "of", "the", "fittest"}; // input vector

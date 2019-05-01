@@ -1,9 +1,13 @@
 #include "std_lib_facilities.h"
+//---------------------------------------------------
+// Create a Book object with the following data:
+// Book {ISBN Number, Title, Author, Copyright Date}
+//---------------------------------------------------
 
 
-//----------------------------------------------------------------------
+//---------------------------------------------------
 // isbn_number
-//----------------------------------------------------------------------
+//---------------------------------------------------
 class isbn_number {
 public:
     class Invalid{}; // to throw as exception
@@ -17,56 +21,11 @@ private:
     int number_3;
     char number_4;
 };
-//----------------------------------------------------------------------
-// Book
-//----------------------------------------------------------------------
-class Book {
-public:
 
-    Book(isbn_number ii, string tt, string aa, string cc); // constructor
-
-    // functions returning private members
-    string ret_isbn() {
-        return isbn.ret_string();
-    }
-    string ret_title() {
-        return title;
-    }
-    string ret_author() {
-        return author;
-    }
-    string ret_c_date() {
-        return c_date;
-    }
-    void cico(); // check in / check out
-    void const check_status(); // check if book is checked out or not
-
-
-private:
-    /* members
-     ISBN, title, author, copyright date
-     */
-    isbn_number isbn;// returned by isbn class function
-    string title;
-    string author;
-    string c_date; // copyright date
-
-    // book checkout out (true/false)
-    bool available{true};
-
-};
-void const Book::check_status() {
-    if (!available) {
-        cout << "Book not available!\n";
-    }
-    else {
-        cout << "Book available!\n";
-    }
-}
-
-//----------------------------------------------------------------------
+//---------------------------------------------------
+// class functions
 isbn_number::isbn_number(int n1, int n2, int n3, char n4)
-:number_1(n1), number_2(n2), number_3(n3), number_4(n4) {
+        :number_1(n1), number_2(n2), number_3(n3), number_4(n4) {
     if (!isbn_check()){ // if this blows up throw invalid
         throw Invalid {};
     }
@@ -91,9 +50,59 @@ string isbn_number::ret_string() {
     return isbn_name;
 }
 
-//----------------------------------------------------------------------
+//---------------------------------------------------
+// Book
+//---------------------------------------------------
+class Book {
+public:
+    // object constructor
+    Book(isbn_number ii, string tt, string aa, string cc);
+    // check if book is available
+    void const check_status();
+    // check in / check out
+    void cico();
+
+    // functions returning private members
+    string ret_isbn() {
+        return isbn.ret_string();
+    }
+    string ret_title() {
+        return title;
+    }
+    string ret_author() {
+        return author;
+    }
+    string ret_c_date() {
+        return c_date;
+    }
+
+private:
+    /* members
+     isbn, title, author, copyright date
+     */
+    isbn_number isbn; // returned by isbn class function
+    string title;
+    string author;
+    string c_date;
+
+    // book availability (true/false)
+    bool available{true};
+
+};
+
+//---------------------------------------------------
+// class functions
 Book::Book(isbn_number ii, string tt, string aa, string cc)
-:isbn(ii), title(move(tt)), author(move(aa)), c_date(move(cc)) { }
+        :isbn(ii), title(move(tt)), author(move(aa)), c_date(move(cc)) { }
+
+void const Book::check_status() {
+    if (!available) {
+        cout << "Book not available!\n";
+    }
+    else {
+        cout << "Book available!\n";
+    }
+}
 
 void Book::cico() {
     // switch true / false (false by default)
@@ -105,6 +114,8 @@ void Book::cico() {
     }
 }
 
+//---------------------------------------------------
+// f()
 void f() {
     // first generate an ISBN number for the book
     isbn_number isbn_book_1 {23, 15, 5003, 'f'};
@@ -128,6 +139,8 @@ void f() {
     // the EnD!
 }
 
+//---------------------------------------------------
+// RUN MAIN
 int main() {
     f();
 }

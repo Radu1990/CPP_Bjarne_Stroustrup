@@ -13,7 +13,7 @@ public:
     class Invalid{}; // to throw as exception
     isbn_number(int n1, int n2, int n3, char n4); // constructor
     bool isbn_check(); // checks if input is ok
-    string ret_string(); // returns single string from this struct
+    string ret_string() const; // returns single string from this struct
 
 private:
     int number_1;
@@ -39,7 +39,7 @@ bool isbn_number::isbn_check() { // this checks if input is ok
     return true;
 }
 
-string isbn_number::ret_string() {
+string isbn_number::ret_string() const {
     vector<string>isbn_vec(4);
     // convert ints to string
     isbn_vec[0] = to_string(number_1);
@@ -56,55 +56,61 @@ string isbn_number::ret_string() {
 //---------------------------------------------------
 class Book {
 public:
-    enum class Genre{
-        fiction=1, nonfiction, mathematics, computerscience, biography, children
+    enum Genre{
+        mathematics=0, computerscience
     };
+
     // object constructor
     Book(Genre gg, isbn_number ii, string tt, string aa, string cc);
+
     // check if book is available
     void const check_status();
     // check in / check out
     void checkio();
 
     // functions returning private members
+    string ret_genre();
 
-    string ret_isbn() {
+    string ret_isbn() const {
         return isbn.ret_string();
     }
-    string ret_title() {
+    string ret_title() const {
         return title;
     }
-    string ret_author() {
+    string ret_author() const {
         return author;
     }
-    string ret_c_date() {
+    string ret_c_date() const {
         return c_date;
     }
+
     // overloaded operators
+    // write into output stream
     ostream& operator<<(ostream& os);
 
 
 private:
-    /* members
-     isbn, title, author, copyright date
-     */
+
     Genre genre;
     isbn_number isbn; // returned by isbn class function
     string title;
     string author;
-    string c_date;
+    string c_date; // copyright date
 
     // book availability (true/false)
     bool available{true};
 
+    const vector<string>
+    genre_enum{"fiction", "nonfiction", "mathematics", "computerscience", "biography", "children"};
 };
 
 //---------------------------------------------------
-// class functions
+// class member functions
 //---------------------------------------------------
 Book::Book(Genre gg, isbn_number ii, string tt, string aa, string cc)
         :genre(gg), isbn(ii), title(move(tt)), author(move(aa)), c_date(move(cc)) { }
 
+// check status if checked out or not
 void const Book::check_status() {
     if (!available) {
         cout << "Book not available!\n";
@@ -114,40 +120,50 @@ void const Book::check_status() {
     }
 }
 
+// check in / check out
 void Book::checkio() {
     // switch true / false (false by default)
     available = !Book::available;
 }
-
-bool operator==(Book& a , Book& b) {
-    //return true if book a and b have SAME isbn
-    return a.ret_isbn() == b.ret_isbn();
+// return string from array corresponding to the Genre integer
+string Book::ret_genre() {
+    return genre_enum[genre];
 }
-
-bool operator!=(Book& a , Book& b) {
-    //return true if book a and b have SAME isbn
-    return a.ret_isbn() != b.ret_isbn();
-}
-
+// write book infos into output stream
 ostream& Book::operator<<(ostream& os) {
-    return os << ret_author() << "\n"
+    return os << ret_genre() << "\n"
+              << ret_author() << "\n"
               << ret_title() << "\n"
               << ret_c_date() << "\n"
               << ret_isbn() << "\n";
 }
 
 //---------------------------------------------------
+// global functions
+//---------------------------------------------------
+// compare isbn
+bool operator==(const Book& a , const Book& b) {
+    //return true if book a and b have SAME isbn
+    return a.ret_isbn() == b.ret_isbn();
+}
+// compare isbn
+bool operator!=(const Book& a , const Book& b) {
+    //return true if book a and b have SAME isbn
+    return a.ret_isbn() != b.ret_isbn();
+}
+
+//---------------------------------------------------
 // f()
 void f() {
     // first generate an ISBN number for the book
-    // Algorithms
+    // book_1: Algorithms
     isbn_number isbn_book_1 {0, 262, 3384, '4'};
-    // Linux Guide
+    // book_2: Linux Guide
     isbn_number isbn_book_2 {9, 780, 59680634, '7'};
     // then create a book with the ISBN number and other details
 
-    Book book_1 {Book::Genre::biography , isbn_book_1, "Introduction to Algorithms", "Thomas Cormen", "2009-01-01"};
-    Book book_2 {4, isbn_book_2, "Linux Pocket Guide", "Daniel J Barrett", "2018-08-17"};
+    Book book_1 {Book::Genre::mathematics , isbn_book_1, "Introduction to Algorithms", "Thomas Cormen", "2009-01-01"};
+    Book book_2 {Book::Genre::computerscience , isbn_book_2, "Linux Pocket Guide", "Daniel J Barrett", "2018-08-17"};
     // print book
     cout << "book_1:\n";
     cout << book_1.ret_isbn() << ", " << book_1.ret_title()

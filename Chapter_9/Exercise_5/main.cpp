@@ -5,9 +5,8 @@
 // Book {ISBN Number, Title, Author, Copyright Date}
 //---------------------------------------------------
 
-
 //---------------------------------------------------
-// isbn_number
+// isbn_number class
 //---------------------------------------------------
 class isbn_number {
 public:
@@ -25,6 +24,7 @@ private:
 
 //---------------------------------------------------
 // class functions
+//---------------------------------------------------
 isbn_number::isbn_number(int n1, int n2, int n3, char n4)
         :number_1(n1), number_2(n2), number_3(n3), number_4(n4) {
     if (!isbn_check()){ // if this blows up throw invalid
@@ -52,18 +52,22 @@ string isbn_number::ret_string() {
 }
 
 //---------------------------------------------------
-// Book
+// Book class
 //---------------------------------------------------
 class Book {
 public:
+    enum class Genre{
+        fiction=1, nonfiction, mathematics, computerscience, biography, children
+    };
     // object constructor
-    Book(isbn_number ii, string tt, string aa, string cc);
+    Book(Genre gg, isbn_number ii, string tt, string aa, string cc);
     // check if book is available
     void const check_status();
     // check in / check out
-    void cico();
+    void checkio();
 
     // functions returning private members
+
     string ret_isbn() {
         return isbn.ret_string();
     }
@@ -76,11 +80,15 @@ public:
     string ret_c_date() {
         return c_date;
     }
+    // overloaded operators
+    ostream& operator<<(ostream& os);
+
 
 private:
     /* members
      isbn, title, author, copyright date
      */
+    Genre genre;
     isbn_number isbn; // returned by isbn class function
     string title;
     string author;
@@ -93,8 +101,9 @@ private:
 
 //---------------------------------------------------
 // class functions
-Book::Book(isbn_number ii, string tt, string aa, string cc)
-        :isbn(ii), title(move(tt)), author(move(aa)), c_date(move(cc)) { }
+//---------------------------------------------------
+Book::Book(Genre gg, isbn_number ii, string tt, string aa, string cc)
+        :genre(gg), isbn(ii), title(move(tt)), author(move(aa)), c_date(move(cc)) { }
 
 void const Book::check_status() {
     if (!available) {
@@ -105,23 +114,40 @@ void const Book::check_status() {
     }
 }
 
-void Book::cico() {
+void Book::checkio() {
     // switch true / false (false by default)
-    if (!Book::available) {
-        available = true;
-    }
-    else {
-        available = false;
-    }
+    available = !Book::available;
+}
+
+bool operator==(Book& a , Book& b) {
+    //return true if book a and b have SAME isbn
+    return a.ret_isbn() == b.ret_isbn();
+}
+
+bool operator!=(Book& a , Book& b) {
+    //return true if book a and b have SAME isbn
+    return a.ret_isbn() != b.ret_isbn();
+}
+
+ostream& Book::operator<<(ostream& os) {
+    return os << ret_author() << "\n"
+              << ret_title() << "\n"
+              << ret_c_date() << "\n"
+              << ret_isbn() << "\n";
 }
 
 //---------------------------------------------------
 // f()
 void f() {
     // first generate an ISBN number for the book
-    isbn_number isbn_book_1 {23, 15, 5003, 'f'};
+    // Algorithms
+    isbn_number isbn_book_1 {0, 262, 3384, '4'};
+    // Linux Guide
+    isbn_number isbn_book_2 {9, 780, 59680634, '7'};
     // then create a book with the ISBN number and other details
-    Book book_1 {isbn_book_1, "Linux Pocket Guide", "Daniel J Barrett", "2018-08-17"};
+
+    Book book_1 {Book::Genre::biography , isbn_book_1, "Introduction to Algorithms", "Thomas Cormen", "2009-01-01"};
+    Book book_2 {4, isbn_book_2, "Linux Pocket Guide", "Daniel J Barrett", "2018-08-17"};
     // print book
     cout << "book_1:\n";
     cout << book_1.ret_isbn() << ", " << book_1.ret_title()
@@ -129,15 +155,31 @@ void f() {
          << book_1.ret_c_date() << endl;
     // check if book is available
     book_1.check_status();
-    // check it out
-    book_1.cico();
+    // check-out
+    book_1.checkio();
     // check if book is available
     book_1.check_status();
-    // check it in using the same method
-    book_1.cico();
+    // check-in using the same method
+    book_1.checkio();
     // check if book is available
     book_1.check_status();
-    // the EnD!
+    // compare isbn of 2 different books using == operator
+    if (book_1==book_2){
+        cout << "Books have same isbn number!\n";
+    }
+    else {
+        cout << "Books don't have same isbn number!\n";
+    }
+    // compare isbn of 2 different books using != operator
+    if (book_1!=book_2){
+        cout << "Books don't have same isbn number!\n";
+    }
+    else {
+        cout << "Books have same isbn number!\n";
+    }
+    // print out Book infos using overloaded operator
+    book_1.operator<<(cout);
+    book_2.operator<<(cout);
 }
 
 //---------------------------------------------------

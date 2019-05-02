@@ -4,9 +4,30 @@
 // Create a Book object with the following data:
 // Book {ISBN Number, Title, Author, Copyright Date}
 //---------------------------------------------------
+class Date{
+public:
+    class Invalid{}; // to throw as exception
+    Date (int y, int m, int d)
+    :d(d), m(m), y(y) {} // check for valid date and initialize
 
+    // non-modifying operations:
+    int day() const {
+        return d;
+    }
+    int month() const {
+        return m;
+    }
+    int year() const {
+        return y;
+    }
+
+private:
+    int y;
+    int m;
+    int d;
+};
 //---------------------------------------------------
-// isbn_number class
+// isbn_number class - isbn data
 //---------------------------------------------------
 class isbn_number {
 public:
@@ -52,7 +73,7 @@ string isbn_number::ret_string() const {
 }
 
 //---------------------------------------------------
-// Book class
+// Book class - book data
 //---------------------------------------------------
 class Book {
 public:
@@ -87,6 +108,8 @@ public:
     // overloaded operators
     // write into output stream
     ostream& operator<<(ostream& os);
+    bool operator==(const Book& b);
+    bool operator!=(const Book& b);
 
 
 private:
@@ -142,18 +165,89 @@ ostream& Book::operator<<(ostream& os) {
 // global functions
 //---------------------------------------------------
 // compare isbn
-bool operator==(const Book& a , const Book& b) {
+bool Book::operator==(const Book& b) {
     //return true if book a and b have SAME isbn
-    return a.ret_isbn() == b.ret_isbn();
+    return ret_isbn() == b.ret_isbn();
 }
 // compare isbn
-bool operator!=(const Book& a , const Book& b) {
+bool Book::operator!=(const Book& b) {
     //return true if book a and b have SAME isbn
-    return a.ret_isbn() != b.ret_isbn();
+    return ret_isbn() != b.ret_isbn();
 }
 
 //---------------------------------------------------
-// f()
+// Patron class - username data
+//---------------------------------------------------
+class Patron {
+public:
+    class Invalid{}; // to throw as exception
+    Patron(string uu, int ll); // constructor
+
+    // members functions
+    string ret_username() {
+        return un;
+    }
+    int ret_cardnumber() {
+        return lcn;
+    }
+    // return string
+    string ret_owes_fee_str() {
+        if (owes_fee) {
+            return "Yes";
+        }
+        else {
+            return "No";
+        }
+    }
+    bool ret_owes_fee_bool() const {
+        return owes_fee;
+    }
+    double ret_fee() {
+        return lf;
+    };
+
+    void set_fee(double n); // set fee by amount n
+    void remove_fee(double n);
+    // print info
+    ostream& operator<<(ostream& os);
+
+
+private:
+    string un; // username
+    int lcn; // library card number of form xxxxxx
+    double lf {0}; // library fees in $
+    bool owes_fee {false}; // owes fees or not
+};
+//---------------------------------------------------
+// class member functions
+//---------------------------------------------------
+Patron::Patron(string uu, int ll)
+:un(move(uu)), lcn(ll) { }
+
+// write book infos into output stream
+ostream& Patron::operator<<(ostream& os) {
+    return os << "username\t" << ret_username() << "\n"
+              << "cardnumber\t" << ret_cardnumber() << "\n"
+              << "owes fees\t" << ret_owes_fee_str() << "\n"
+              << "fees\t\t"<< ret_fee() << "$\n";
+}
+
+// set fees
+void Patron::set_fee(double n) {
+    lf += n;
+    owes_fee = {true};
+}
+void Patron::remove_fee(double n) {
+    lf -= n;
+    if (lf == 0) {
+        owes_fee = {false};
+    }
+}
+
+
+//---------------------------------------------------
+// f() - testing Book class
+//---------------------------------------------------
 void f() {
     // first generate an ISBN number for the book
     // book_1: Algorithms
@@ -197,9 +291,124 @@ void f() {
     book_1.operator<<(cout);
     book_2.operator<<(cout);
 }
+//---------------------------------------------------
+// g() - testing Patron class
+//---------------------------------------------------
+void g() {
+    // creating patron obj
+    Patron patron_1 {"Radu", 123456};
+    // printing data
+    patron_1.operator<<(cout);
+    // setting fee of 1.99
+    patron_1.set_fee(1.99);
+    patron_1.operator<<(cout);
+    // remove fee of 1.99
+    patron_1.remove_fee(1.99);
+    patron_1.operator<<(cout);
+}
+//---------------------------------------------------
+// Library Class - holds patron, books and transactions data
+//---------------------------------------------------
+class Library {
+public:
+    Library() = default; // default constructor
+    class Invalid{}; // to throw as exception
+
+    // member functions
+    void add_book(Book& bb, Book& ...);
+    void add_patron(Patron& pp, Patron& ...);
+    bool checkok(Book& bb, Patron& pp);
+    void check_out_book(Book& bb, Patron& pp, Date& dd); //check-out book if conditions are passed
+
+
+private:
+    vector<Book> book_db;
+    vector<Patron> patron_db;
+
+    struct Transaction {
+        Book b;
+        Patron t;
+        Date dd;
+    };
+    vector<Transaction> transactions;
+};
+
+void Library::add_book(Book& bb, Book& ...) {
+    book_db.push_back(bb);
+}
+
+void Library::add_patron(Patron& pp, Patron&...) {
+    patron_db.push_back(pp);
+}
+
+bool Library::checkok(Book& bb, Patron& pp){
+    // check if Book is in db
+    for (int i=0; i < book_db.size(); ++i) {
+        if (book_db[i].ret_title() == bb.ret_title()) {
+            break;
+        }
+        if (i == book_db.size()-1 && book_db[i].ret_title() != bb.ret_title()) {
+            error("Book not in database!");
+        }
+    }
+    // check if Patron is in db
+    for (int i=0; i < patron_db.size(); ++i) {
+
+        if (patron_db[i].ret_username() == pp.ret_username()) {
+            break;
+        }
+        if (i == patron_db.size()-1 && patron_db[i].ret_username() != pp.ret_username()) {
+            error("Book not in database!");
+        }
+    }
+    // check if Patron is in debt
+    if (pp.ret_owes_fee_bool()) {
+        cout << "Patron owes fees!\n";
+        return false;
+    }
+    return true;
+}
+
+void Library::check_out_book(Book& bb, Patron& pp, Date& dd ) {
+    if (Library::checkok(bb, pp)) {
+        Transaction t {bb, pp, dd};
+        // add transaction to the vector
+        transactions.push_back(t);
+    }
+    else {
+        throw Invalid{};
+    }
+}
+//TODO READ TRANSACTIONS
+//---------------------------------------------------
+// h() - testing Library class
+//---------------------------------------------------
+void h() {
+    // creating Patrons
+    Patron patron_1{"Radu", 123456};
+    Patron patron_2{"Maria", 564895};
+    // creating books
+    isbn_number isbn_book_1 {0, 262, 3384, '4'};
+    isbn_number isbn_book_2 {9, 780, 59680634, '7'};
+    Book book_1 {Book::Genre::mathematics , isbn_book_1, "Introduction to Algorithms", "Thomas Cormen", "2009-01-01"};
+    Book book_2 {Book::Genre::computerscience , isbn_book_2, "Linux Pocket Guide", "Daniel J Barrett", "2018-08-17"};
+    // creating library
+    Library library_1;
+    // adding books and patrons to library database
+    library_1.add_patron(patron_1, patron_2);
+    library_1.add_book(book_1, book_2);
+    // creating date of today
+    Date dd {2, 5, 2019};
+    // checking book out from library
+    library_1.check_out_book(book_1, patron_1, dd);
+
+
+}
 
 //---------------------------------------------------
 // RUN MAIN
 int main() {
-    f();
+//    f(); // Book class test
+//    g(); // Patron class test
+//    h(); // Library class test
 }

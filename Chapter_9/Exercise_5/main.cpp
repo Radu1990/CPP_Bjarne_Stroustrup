@@ -20,6 +20,10 @@ public:
     int year() const {
         return y;
     }
+    string ret_date () const {
+        string date = to_string(day()) + "-" + to_string(month()) + "-" + to_string(year());
+        return date;
+    }
 
 private:
     int y;
@@ -184,7 +188,7 @@ public:
     Patron(string uu, int ll); // constructor
 
     // members functions
-    string ret_username() {
+    string ret_username() const {
         return un;
     }
     int ret_cardnumber() {
@@ -315,11 +319,15 @@ public:
     class Invalid{}; // to throw as exception
 
     // member functions
-    void add_book(Book& bb, Book& ...);
-    void add_patron(Patron& pp, Patron& ...);
+    void add_book(Book& bb);
+    void add_patron(Patron& pp);
     bool checkok(Book& bb, Patron& pp);
     void check_out_book(Book& bb, Patron& pp, Date& dd); //check-out book if conditions are passed
-
+    void read_transactions();
+    void read_book_db();
+    void read_patron_db();
+    vector <Patron> ret_fee_owners(); // writes fee owners into vector member
+    void read_fee_owners(); // reads fee owners from vector
 
 private:
     vector<Book> book_db;
@@ -331,13 +339,14 @@ private:
         Date dd;
     };
     vector<Transaction> transactions;
+    vector<Patron> fee_owners;
 };
 
-void Library::add_book(Book& bb, Book& ...) {
+void Library::add_book(Book& bb) {
     book_db.push_back(bb);
 }
 
-void Library::add_patron(Patron& pp, Patron&...) {
+void Library::add_patron(Patron& pp) {
     patron_db.push_back(pp);
 }
 
@@ -358,7 +367,7 @@ bool Library::checkok(Book& bb, Patron& pp){
             break;
         }
         if (i == patron_db.size()-1 && patron_db[i].ret_username() != pp.ret_username()) {
-            error("Book not in database!");
+            error("Patron not in database!");
         }
     }
     // check if Patron is in debt
@@ -379,7 +388,51 @@ void Library::check_out_book(Book& bb, Patron& pp, Date& dd ) {
         throw Invalid{};
     }
 }
-//TODO READ TRANSACTIONS
+
+void Library::read_transactions() {
+    cout << "Listing Transactions:\n";
+    int counter_transactions{0};
+    for (const Transaction& x : transactions) {
+        ++counter_transactions;
+        cout << "Transaction:\t" << counter_transactions << "\n"
+             << "Book:\t\t\t" << x.b.ret_title() << "\n"
+             << "Patron:\t\t\t" << x.t.ret_username() << "\n"
+             << "Date:\t\t\t" << x.dd.ret_date() << "\n";
+    }
+}
+
+void Library::read_book_db(){
+    for (const Book& x : book_db) {
+        cout << x.ret_title() << "\n";
+    }
+
+}
+
+void Library::read_patron_db(){
+    for (const Patron& x : patron_db) {
+        cout << x.ret_username() << "\n";
+    }
+
+}
+
+vector<Patron> Library::ret_fee_owners(){
+    for (const Patron& x : patron_db) {
+        if (x.ret_owes_fee_bool()){
+            fee_owners.push_back(x);
+        }
+    }
+    return fee_owners;
+}
+
+void Library::read_fee_owners(){
+    cout << "Listing fee owners:\n";
+    for (Patron x : fee_owners) {
+        cout << x.ret_username() << "\n";
+    }
+}
+
+
+
 //---------------------------------------------------
 // h() - testing Library class
 //---------------------------------------------------
@@ -387,6 +440,8 @@ void h() {
     // creating Patrons
     Patron patron_1{"Radu", 123456};
     Patron patron_2{"Maria", 564895};
+    // setting fee for patron_2
+    patron_2.set_fee(1.99);
     // creating books
     isbn_number isbn_book_1 {0, 262, 3384, '4'};
     isbn_number isbn_book_2 {9, 780, 59680634, '7'};
@@ -395,14 +450,19 @@ void h() {
     // creating library
     Library library_1;
     // adding books and patrons to library database
-    library_1.add_patron(patron_1, patron_2);
-    library_1.add_book(book_1, book_2);
-    // creating date of today
-    Date dd {2, 5, 2019};
+    library_1.add_patron(patron_1);
+    library_1.add_patron(patron_2);
+    library_1.add_book(book_1);
+    library_1.add_book(book_2);
+    // creating dates
+    Date d1 {2, 5, 2019};
+    Date d2 {3, 5, 2019};
     // checking book out from library
-    library_1.check_out_book(book_1, patron_1, dd);
-
-
+    library_1.check_out_book(book_1, patron_1, d1);
+    library_1.read_transactions();
+    library_1.ret_fee_owners();
+    library_1.read_fee_owners();
+    
 }
 
 //---------------------------------------------------
@@ -410,5 +470,5 @@ void h() {
 int main() {
 //    f(); // Book class test
 //    g(); // Patron class test
-//    h(); // Library class test
+    h(); // Library class test
 }

@@ -471,4 +471,5 @@ int main() {
 //    f(); // Book class test
 //    g(); // Patron class test
     h(); // Library class test
+    //TODO REWRITE THE FUCKIN GOOGLE TEST WITH namespace{ this time
 }

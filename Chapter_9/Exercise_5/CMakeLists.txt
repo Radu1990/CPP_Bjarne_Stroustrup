@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.14)
-project(Exercise_3)
 
-set(CMAKE_CXX_STANDARD 14)
+set (This ex5)
+project(This C CXX)
 
-add_executable(Exercise_3 main.cpp)
+set(CMAKE_CXX_STANDARD 11)
+
+set (Headers ex5.h)
+set (Sources ex5.cpp)
+
+add_library(${This} STATIC ${Headers} ${Sources})
+
+add_subdirectory(googletest)
+add_subdirectory(tests)

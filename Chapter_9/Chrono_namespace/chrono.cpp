@@ -70,8 +70,22 @@ bool is_date(int y, Month m, int d) {
     return true; // finally return true
 }
 
-bool leapyear(int y) {
-    // see ex 10
+bool leap_year(int y) {
+//    if (year is not divisible by 4) then (it is a common year)
+    bool leap_year = false;
+    if (y%4==0) {
+        leap_year = true;
+    }
+//    else if (_year is not divisible by 100) then (it is a leap year)
+    if (y%100==0) {
+        leap_year = false;
+    }
+//    else if (_year is not divisible by 400) then (it is a common year)
+    if (y%400==0) {
+        leap_year = true;
+    }
+    return leap_year;
+//    else (it is a leap year)
 }
 
 bool operator==(const Date& a, const Date& b) {
@@ -111,10 +125,6 @@ istream& operator>>(istream& is, Date& dd) {
     return is;
 }
 
-enum class Day{
-    sunday, monday, tuesday, wednesday, thursday, friday, saturday
-};
-
 Day day_of_week(const Date& d) {
     ///
 }
@@ -129,4 +139,16 @@ Date next_weekday(const Date& d) {
 
 } // Chrono - End
 
+void f(bool x) {
+    if (x) {
+        cout << "is Leap year\n";
+    }
+    else {
+        cout << "not Leap year\n";
+    }
+}
+
+int main() {
+    f(Chrono::leap_year(2019));
+}
 

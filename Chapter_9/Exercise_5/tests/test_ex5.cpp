@@ -79,7 +79,6 @@ TEST(testingLibraryClass, test1){
     library_1.add_book(book_2);
     // creating dates
     Date d1 {2, 5, 2019};
-    Date d2 {3, 5, 2019};
     // checking book out from library
     library_1.check_out_book(book_1, patron_1, d1);
     library_1.read_transactions();

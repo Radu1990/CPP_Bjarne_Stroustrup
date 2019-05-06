@@ -21,6 +21,18 @@ void Date::add_day(int n) {
         d -= 31;
         add_month(1);
     }
+    add_weekday(n);
+
+}
+
+void Date::add_weekday(int n) {
+    int new_weekday = int(w) + n;
+    // checking for next weekday
+    // Switch - Begin
+    while (new_weekday > 7) {
+        new_weekday = new_weekday - 7;
+    }
+    w = Day(new_weekday);
 }
 
 void Date::add_month(int n) {
@@ -28,6 +40,10 @@ void Date::add_month(int n) {
     new_month = int(m) + n;
     if (new_month > 12) {
         m = Month(new_month-12);
+        y = y + (new_month-12);
+    }
+    else{
+        m = Month(new_month);
     }
 }
 
@@ -91,13 +107,14 @@ bool leap_year(int y) {
 //    else (it is a leap year)
 }
 
-void print_leap_year(int x) {
+void print_leap_year(const Date& dd) {
+    int x = dd.year();
     bool year = leap_year(x);
     if (year) {
-        cout << "\n" << x << " is a Leap year";
+        cout << x << " is a Leap year\n";
     }
     else {
-        cout << "\n" << x << " is not a Leap year";
+        cout << x << " is not a Leap year\n";
     }
 }
 
@@ -116,7 +133,7 @@ bool operator!=(const Date& a, const Date& b) {
 
 ostream& operator << (ostream& os, const Date& d) {
     ostream& res = {
-            os << '(' << d.year() << ',' << int(d.month()) << ',' << d.day() << "," <<  int(d.weekday()) << ')'
+        os << "Y" << d.year() << "-M" << int(d.month()) << "-D" << d.day() << "-WD" <<  int(d.weekday()) << "\n"
     };
     return res;
 }
@@ -212,7 +229,7 @@ Date next_sunday(const Date& dd) {
     return ret;
 }
 
-Date week_day(const Date& dd) {
+Date next_weekday(const Date& dd) {
 
     // fetching current date members
     int d_curr = dd.day();

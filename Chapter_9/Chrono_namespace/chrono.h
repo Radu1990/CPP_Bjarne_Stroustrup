@@ -46,9 +46,12 @@ public:
     }
 
     // modifying operations:
+    void add_weekday(int n);
     void add_day(int n);
     void add_month(int n);
     void add_year(int n);
+
+
 
 private:
     int y;
@@ -59,7 +62,7 @@ private:
 
 bool is_date(int y, Month m, int d); // true for valid date
 bool leap_year (int y); // true if y is a leap year
-void print_leap_year(int x);
+void print_leap_year(const Date& dd);
 
 bool operator==(const Date& x, const Date& y);
 bool operator!=(const Date& x, const Date& y);

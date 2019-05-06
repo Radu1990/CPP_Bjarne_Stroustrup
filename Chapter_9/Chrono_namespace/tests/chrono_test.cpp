@@ -27,5 +27,8 @@ TEST(testingDate, test2) {
     cout << "NEXT WEEKDAY:\n";
     Date next_wd = next_weekday(example);
     Chrono::operator<<(cout, next_wd);
+    cout << "NEXT SUNDAY:\n";
+    Date next_sun = next_sunday(example);
+    Chrono::operator<<(cout, next_sun);
     // TODO WRITE FUNCTIONS FOR WEEK OF YEAR AND NEXT WORKDAY
 }

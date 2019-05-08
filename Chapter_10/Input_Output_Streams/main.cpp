@@ -84,4 +84,5 @@ int main(){
 
     //compare vectors
     vectors_check(original_points, processed_points);
+
 }

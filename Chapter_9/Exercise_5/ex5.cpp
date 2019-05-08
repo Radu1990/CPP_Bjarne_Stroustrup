@@ -4,10 +4,15 @@
 // FUNCTIONS ISBN CLASS
 //------------------------------------------------
 
+struct MyException : std::exception
+{
+    const char* what() const noexcept override { return "Buggers!"; }
+};
+
 isbn_number::isbn_number(int n1, int n2, int n3, char n4)
         :number_1(n1), number_2(n2), number_3(n3), number_4(n4) {
     if (!isbn_check()){ // if this blows up throw invalid
-        throw Invalid {};
+        throw MyException{};
     }
 }
 
@@ -130,7 +135,7 @@ bool Library::checkok(Book& bb, Patron& pp){
             break;
         }
         if (i == book_db.size()-1 && book_db[i].ret_title() != bb.ret_title()) {
-            throw Invalid{};
+            throw MyException{};
         }
     }
     // check if Patron is in db
@@ -140,7 +145,7 @@ bool Library::checkok(Book& bb, Patron& pp){
             break;
         }
         if (i == patron_db.size()-1 && patron_db[i].ret_username() != pp.ret_username()) {
-            throw Invalid{};
+            throw MyException{};
         }
     }
     // check if Patron is in debt
@@ -158,7 +163,7 @@ void Library::check_out_book(Book& bb, Patron& pp, Date& dd ) {
         transactions.push_back(t);
     }
     else {
-        throw Invalid{};
+        throw MyException{};;
     }
 }
 

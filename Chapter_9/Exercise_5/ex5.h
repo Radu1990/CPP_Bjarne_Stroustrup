@@ -9,7 +9,7 @@ using namespace std;
 
 class Date{
 public:
-    class Invalid{}; // to throw as exception
+
     Date (int y, int m, int d)
             :d(d), m(m), y(y) {} // check for valid date and initialize
 
@@ -33,7 +33,7 @@ private:
 
 class isbn_number { // ISBN NUMBER IN THE FORM nnnx - where n is an int and x an alphanumeric digit
 public:
-    class Invalid{}; // to throw as exception
+
     isbn_number(int n1, int n2, int n3, char n4); // constructor
     bool isbn_check(); // checks if input is ok
     string ret_string() const; // returns single string from this struct
@@ -100,7 +100,7 @@ private:
 
 class Patron {
 public:
-    class Invalid{}; // to throw as exception
+
     Patron(string uu, int ll); // constructor
 
     // members functions
@@ -142,7 +142,6 @@ private:
 class Library {
 public:
     Library() = default; // default constructor
-    class Invalid{}; // to throw as exception
 
     // member functions
     void add_book(Book& bb);

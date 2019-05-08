@@ -5,7 +5,6 @@ using namespace std;
 #include "exception"
 #include "fstream"
 
-
 #ifndef EXERCISE_2_TEMP_STATS_H
 #define EXERCISE_2_TEMP_STATS_H
 void compute_mean_temps();

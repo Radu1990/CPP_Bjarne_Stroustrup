@@ -39,6 +39,3 @@ void store_temps() {
     // write values from vector to file
     write_vector_to_file(temps, "raw_temps.txt");
 }
-
-
-

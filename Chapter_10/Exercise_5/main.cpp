@@ -174,39 +174,39 @@ istream& operator>>(istream& is, Year& y) {
     return is;
 }
 
-void print_dht (ofstream& ofs, int i, int j, int k, Year& yy) {
-    // printing Day, Hour, Temp
-    if (yy.month[i].day[j].hour[k] != not_a_reading) {
-        ofs << "\t\tDay:" << j << endl;
-        ofs << "\t\tHour:" << k << " ";
-        ofs << "\t\tTemp:" << yy.month[i].day[j].hour[k] << "\n\n";
+void return_day(ofstream& ofs, const vector<Day>& dd){
+    // printing days, hours, temp
+    for (int j = 0; j < dd.size(); ++j) {
+        for (int k = 0; k < dd[j].hour.size(); ++k) {
+            // printing Day, Hour, Temp
+            if (dd[j].hour[k] != not_a_reading) {
+                ofs << "\t\tDay:" << j << endl;
+                ofs << "\t\tHour:" << k << " ";
+                ofs << "\t\tTemp:" << dd[j].hour[k] << "\n\n";
+            }
+        }
     }
 }
 
-void print_y (ofstream& ofs, Year& yy) {
+void return_month (ofstream& ofs, const vector<Month>& mm) {
+    for (int i = 0; i < mm.size(); ++i) {
+        if (mm[i].month != not_a_month) {
+            ofs << "\tMonth:" << int_to_month(mm[i].month) << endl;
+        }
+        return_day(ofs, mm[i].day);
+    }
+}
+
+void return_year(ofstream& ofs, Year& yy) {
     // printing years
     ofs << "Year:" << yy.year << "\n";
-}
-void print_m (ofstream& ofs, int i, Year& yy) {
-    if (yy.month[i].month != not_a_month) {
-        ofs << "\tMonth:" << int_to_month(yy.month[i].month) << endl;
-    }
 }
 
 void print_year(ofstream& ofs, Year& yy) {
     // printing years
-    print_y(ofs, yy);
+    return_year(ofs, yy);
     // printing months
-    for (int i=0; i < yy.month.size(); ++i) {
-        // write months for year
-        print_m(ofs, i, yy);
-        // printing days, hours, temp
-        for (int j = 0; j < yy.month[i].day.size(); ++j) {
-            for (int k = 0; k < yy.month[i].day[j].hour.size(); ++k) {
-                print_dht(ofs, i, j, k, yy);
-            }
-        }
-    }
+    return_month(ofs, yy.month);
 }
 
 void read_write_years(ifstream& ifs, ofstream& ofs) {
@@ -217,9 +217,7 @@ void read_write_years(ifstream& ifs, ofstream& ofs) {
         if (!(ifs>>y)) break;
         ys.push_back(y);
     }
-
     cout << "read " << ys.size() << " years of readings\n";
-
     for (Year& y : ys) {
         print_year(ofs,y);
     }

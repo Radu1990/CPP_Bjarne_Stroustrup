@@ -1,5 +1,7 @@
 #include <iostream>
 #include "std_lib_facilities.h"
+#include <limits.h>
+#include <unistd.h>
 
 const int not_a_reading = -7777;
 const int not_a_month = -1;
@@ -11,6 +13,13 @@ struct MyException : std::exception
 {
     const char* what() const noexcept override { return "Buggers!"; }
 };
+
+// check current working directory
+string getexepath() {
+    char result[ PATH_MAX ];
+    ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
+    return std::string( result, (count > 0) ? count : 0 );
+}
 
 vector<string>month_input_tbl {
     "jan", "feb", "mar", "apr",
@@ -166,33 +175,29 @@ istream& operator>>(istream& is, Year& y) {
 }
 
 void print_year(ofstream& ofs, Year& yy) {
-    ///
-    ofs << "Year:" << yy.year << endl;
-//        << "Month:" << yy.month[]
+    // printing years
+    ofs << "Year:" << yy.year << "\n";
+    // printing months
+    for (int i=0; i < yy.month.size(); ++i) {
+        if (yy.month[i].month != not_a_month) {
+            ofs << "\tMonth:" << int_to_month(yy.month[i].month) << endl; // write months for year
+            // printing days
+            for (int j = 0; j < yy.month[i].day.size(); ++j) {
+                for (int k = 0; k < yy.month[i].day[j].hour.size(); ++k) {
+                    if (yy.month[i].day[j].hour[k] != not_a_reading) {
+                        ofs << "\t\tDay:" << j << endl;
+                        ofs << "\t\tHour:" << k << " ";
+                        ofs << "\t\tTemp:" << yy.month[i].day[j].hour[k] << "\n\n";
+                    }
+                }
+            }
+        }
+    }
+//    m.day[r.day].hour[r.hour] = r.temperature
 }
-bool is_file_exist(const char *fileName)
-{
-    std::ifstream infile(fileName);
-    return infile.good();
-}
 
-int main() {
-    // open an input file:
 
-    cout << "Please enter input file name\n";
-    string iname = "/textfiles/input.txt";
-//    cin >> iname;
-    ifstream ifs {iname};
-    if (!ifs) error ("can't open file name \n", iname);
-    ifs.exceptions(ifs.exceptions()|ios_base::badbit);
-
-    // open output file
-    cout << "Please enter output file name \n";
-    string oname;
-    cin >> oname;
-    ofstream ofs {oname};
-    if (!ofs) error("can't open output file", oname);
-
+void read_write_years(ifstream& ifs, ofstream& ofs) {
     // read an arbitrary number of years:
     vector<Year> ys;
     while(true) {
@@ -200,9 +205,29 @@ int main() {
         if (!(ifs>>y)) break;
         ys.push_back(y);
     }
-    cout << "read" << ys.size() << "years of readings\n";
+    cout << "read " << ys.size() << " years of readings\n";
 
     for (Year& y : ys) {
         print_year(ofs,y);
     }
+}
+
+
+int main() {
+
+    // open an input file:
+    cout << "Please enter input file name\n";
+    string iname = "../textfiles/input.txt"; // add / change to cin >> iname; if needed
+    ifstream ifs {iname};
+    if (!ifs) error ("can't open file name \n", iname);
+    ifs.exceptions(ifs.exceptions()|ios_base::badbit);
+
+    // open output file
+    cout << "Please enter output file name \n";
+    string oname = "../textfiles/output.txt"; // add / change to cin >> oname; if needed
+    ofstream ofs {oname};
+    if (!ofs) error("can't open output file", oname);
+
+    read_write_years(ifs, ofs);
+
 }

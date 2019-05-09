@@ -1,0 +1,36 @@
+Year:1990
+Year:1991
+	Month:June
+Year:1992
+	Month:January
+		Day:1
+		Hour:0 		Temp:61.5
+
+	Month:February
+		Day:1
+		Hour:1 		Temp:64
+
+		Day:2
+		Hour:2 		Temp:65.2
+
+Year:2000
+	Month:February
+		Day:1
+		Hour:0 		Temp:67.2
+
+		Day:1
+		Hour:1 		Temp:68
+
+		Day:2
+		Hour:3 		Temp:66.66
+
+	Month:December
+		Day:14
+		Hour:0 		Temp:-2
+
+		Day:15
+		Hour:14 		Temp:-8.8
+
+		Day:15
+		Hour:15 		Temp:-9.2
+

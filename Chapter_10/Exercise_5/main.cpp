@@ -174,28 +174,40 @@ istream& operator>>(istream& is, Year& y) {
     return is;
 }
 
-void print_year(ofstream& ofs, Year& yy) {
+void print_dht (ofstream& ofs, int i, int j, int k, Year& yy) {
+    // printing Day, Hour, Temp
+    if (yy.month[i].day[j].hour[k] != not_a_reading) {
+        ofs << "\t\tDay:" << j << endl;
+        ofs << "\t\tHour:" << k << " ";
+        ofs << "\t\tTemp:" << yy.month[i].day[j].hour[k] << "\n\n";
+    }
+}
+
+void print_y (ofstream& ofs, Year& yy) {
     // printing years
     ofs << "Year:" << yy.year << "\n";
+}
+void print_m (ofstream& ofs, int i, Year& yy) {
+    if (yy.month[i].month != not_a_month) {
+        ofs << "\tMonth:" << int_to_month(yy.month[i].month) << endl;
+    }
+}
+
+void print_year(ofstream& ofs, Year& yy) {
+    // printing years
+    print_y(ofs, yy);
     // printing months
     for (int i=0; i < yy.month.size(); ++i) {
-        if (yy.month[i].month != not_a_month) {
-            ofs << "\tMonth:" << int_to_month(yy.month[i].month) << endl; // write months for year
-            // printing days
-            for (int j = 0; j < yy.month[i].day.size(); ++j) {
-                for (int k = 0; k < yy.month[i].day[j].hour.size(); ++k) {
-                    if (yy.month[i].day[j].hour[k] != not_a_reading) {
-                        ofs << "\t\tDay:" << j << endl;
-                        ofs << "\t\tHour:" << k << " ";
-                        ofs << "\t\tTemp:" << yy.month[i].day[j].hour[k] << "\n\n";
-                    }
-                }
+        // write months for year
+        print_m(ofs, i, yy);
+        // printing days, hours, temp
+        for (int j = 0; j < yy.month[i].day.size(); ++j) {
+            for (int k = 0; k < yy.month[i].day[j].hour.size(); ++k) {
+                print_dht(ofs, i, j, k, yy);
             }
         }
     }
-//    m.day[r.day].hour[r.hour] = r.temperature
 }
-
 
 void read_write_years(ifstream& ifs, ofstream& ofs) {
     // read an arbitrary number of years:
@@ -205,6 +217,7 @@ void read_write_years(ifstream& ifs, ofstream& ofs) {
         if (!(ifs>>y)) break;
         ys.push_back(y);
     }
+
     cout << "read " << ys.size() << " years of readings\n";
 
     for (Year& y : ys) {
@@ -212,9 +225,7 @@ void read_write_years(ifstream& ifs, ofstream& ofs) {
     }
 }
 
-
 int main() {
-
     // open an input file:
     cout << "Please enter input file name\n";
     string iname = "../textfiles/input.txt"; // add / change to cin >> iname; if needed
@@ -229,5 +240,4 @@ int main() {
     if (!ofs) error("can't open output file", oname);
 
     read_write_years(ifs, ofs);
-
 }

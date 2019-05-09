@@ -1,5 +1,5 @@
 #include <iostream>
-#include "std_lib_facilities.h";
+#include "std_lib_facilities.h"
 
 const int not_a_reading = -7777;
 const int not_a_month = -1;
@@ -11,6 +11,37 @@ struct MyException : std::exception
 {
     const char* what() const noexcept override { return "Buggers!"; }
 };
+
+vector<string>month_input_tbl {
+    "jan", "feb", "mar", "apr",
+    "may", "jun", "jul", "aug",
+    "sep", "oct", "nov", "dec"
+};
+
+int month_to_int (const string& s) {
+    // if s is the string of the month
+    // return it's index [0:11]
+    // else return -1
+    for (int i=0; i<12; ++i) {
+        if (month_input_tbl[i] == s) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+vector<string> month_print_tbl = {
+        "January", "February", "March", "April",
+        "May", "June", "July", "August",
+        "September", "October", "November", "December"
+};
+
+string int_to_month(int i) {
+    // months [0:11]
+    if (i<0 || 12<=i) error ("bad month index\n");
+    return month_print_tbl[i];
+}
+
 
 struct Reading {
     int day;
@@ -29,7 +60,7 @@ struct Month { // a month of temperature readings
 };
 
 struct Year { // a year of temperature readings, organized by month
-    int year; // positive == A.D.
+    int year{}; // positive == A.D.
     vector<Month> month {12}; // [0:11] January is 0
 };
 
@@ -134,13 +165,23 @@ istream& operator>>(istream& is, Year& y) {
     return is;
 }
 
+void print_year(ofstream& ofs, Year& yy) {
+    ///
+    ofs << "Year:" << yy.year << endl;
+//        << "Month:" << yy.month[]
+}
+bool is_file_exist(const char *fileName)
+{
+    std::ifstream infile(fileName);
+    return infile.good();
+}
 
 int main() {
     // open an input file:
 
     cout << "Please enter input file name\n";
-    string iname;
-    cin >> iname;
+    string iname = "/textfiles/input.txt";
+//    cin >> iname;
     ifstream ifs {iname};
     if (!ifs) error ("can't open file name \n", iname);
     ifs.exceptions(ifs.exceptions()|ios_base::badbit);
@@ -155,7 +196,7 @@ int main() {
     // read an arbitrary number of years:
     vector<Year> ys;
     while(true) {
-        Year y; // get a freshly initialized Year each time around
+        Year y{}; // get a freshly initialized Year each time around
         if (!(ifs>>y)) break;
         ys.push_back(y);
     }

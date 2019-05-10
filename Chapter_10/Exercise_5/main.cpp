@@ -142,7 +142,7 @@ istream& operator>>(istream& is, Month& m) {
             ++invalids;
         }
     }
-    if (invalids) error("duplicate readings in month", duplicates);
+    if (invalids) error("invalid readings in month", invalids);
     if (duplicates) error("duplicate readings in month", duplicates);
     end_of_loop(is, '}', "bad end of month");
     return is;
@@ -173,7 +173,7 @@ istream& operator>>(istream& is, Year& y) {
     end_of_loop(is, '}', "bad end of year");
     return is;
 }
-
+// called by return_month
 void return_day(ofstream& ofs, const vector<Day>& dd){
     // printing days, hours, temp
     for (int j = 0; j < dd.size(); ++j) {
@@ -187,7 +187,7 @@ void return_day(ofstream& ofs, const vector<Day>& dd){
         }
     }
 }
-
+// called by print_year
 void return_month (ofstream& ofs, const vector<Month>& mm) {
     for (int i = 0; i < mm.size(); ++i) {
         if (mm[i].month != not_a_month) {
@@ -196,19 +196,19 @@ void return_month (ofstream& ofs, const vector<Month>& mm) {
         return_day(ofs, mm[i].day);
     }
 }
-
+// called by print_year
 void return_year(ofstream& ofs, Year& yy) {
     // printing years
     ofs << "Year:" << yy.year << "\n";
 }
-
+// called by main read_write_years
 void print_year(ofstream& ofs, Year& yy) {
     // printing years
     return_year(ofs, yy);
     // printing months
     return_month(ofs, yy.month);
 }
-
+// main function for read and write of data
 void read_write_years(ifstream& ifs, ofstream& ofs) {
     // read an arbitrary number of years:
     vector<Year> ys;
@@ -237,5 +237,6 @@ int main() {
     ofstream ofs {oname};
     if (!ofs) error("can't open output file", oname);
 
+    // read and write files
     read_write_years(ifs, ofs);
 }

@@ -112,9 +112,22 @@ const char make_const = '&';
 const char help = '!';
 // declaring roman numerals
 
-vector<string> numerals {
+vector<string> roman_numerals {
         "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"
 };
+vector<double> arabic_numerals {
+        1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0
+};
+
+double convert_roman_to_arabic (const string& s) {
+    for (int i = 0; i<roman_numerals.size(); ++i) {
+        if (roman_numerals[i] == s) {
+            return arabic_numerals[i];
+        }
+    }
+    error("No value found");
+
+}
 
 const string prompt = "> ";
 const string result = "= ";
@@ -202,12 +215,7 @@ Token Token_stream::get() {
                 while (cin.get(ch) && (isupper(ch))) {
                     r += ch;
                 }
-                if (r == numerals[0]) {
-                    return Token(number, 1.0);
-                }
-                if (r == numerals[1]) {
-                    return Token(number, 2.0);
-                }
+                return Token(number, convert_roman_to_arabic(r));
                 // TODO Continue from here
             }
             // read a sequence of chars

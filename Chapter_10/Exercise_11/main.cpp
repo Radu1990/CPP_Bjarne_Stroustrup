@@ -4,7 +4,7 @@ int main() {
     vector<string>terms{};
     vector<int>numbers{};
 
-    ifstream is {"input.txt"};
+    ifstream is {"../textfiles/input.txt"};
     if (!is) error("can't open input file!");
 
     char ch{};

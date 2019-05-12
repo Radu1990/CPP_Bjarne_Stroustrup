@@ -19,9 +19,10 @@
     This program implements a basic expression calculator.
     Input from cin; output to cout.
 
-    Accepts Roman numerals instead of Arabic numerals
+    This version Reads from input file input.txt
+    and write to output file output.txt
 
-    Reads from input file and write to output file
+    Accepts Roman numerals instead of Arabic numerals as-well
 
     The grammar for input is:
 
@@ -79,20 +80,20 @@
 #include "std_lib_facilities.h"
 //------------------------------------------------------------------------------
 // Help Message displayed when typing help;
-string h_msg = "+======================================+\n"
-               "||    Help page for 'CPP BUGGY v1'    ||\n"
-               "+======================================+\n"
-                  "\t> type 'quit' to quit\n"
-                  "\t> press enter to print result\n"
-                  "\t> for square root press '! x' where x is the number\n"
-                  "\t> -------------------------------------------------------------------\n"
-                  "\t> for raise to power type '@ x y' where 'x' is the number;\n"
-                  "\t> and 'y' is the power being raised at;\n"
-                  "\t> to create a named value use 'let name value';\n"
-                  "\t> -------------------------------------------------------------------\n"
-                  "\t> to create a named constant value use 'let const name value';\n"
-                  "\t> to reassign a value to a non-constant use '= name = new_value';\n"
-                  "\t> -------------------------------------------------------------------\n";
+static string h_msg = "+======================================+\n"
+                      "||    Help page for 'CPP BUGGY v1'    ||\n"
+                      "+======================================+\n"
+                      "\t> type 'quit' to quit\n"
+                      "\t> press enter to print result\n"
+                      "\t> for square root press '! x' where x is the number\n"
+                      "\t> -------------------------------------------------------------------\n"
+                      "\t> for raise to power type '@ x y' where 'x' is the number;\n"
+                      "\t> and 'y' is the power being raised at;\n"
+                      "\t> to create a named value use 'let name value';\n"
+                      "\t> -------------------------------------------------------------------\n"
+                      "\t> to create a named constant value use 'let const name value';\n"
+                      "\t> to reassign a value to a non-constant use '= name = new_value';\n"
+                      "\t> -------------------------------------------------------------------\n";
 //------------------------------------------------------------------------------
 // Welcome Message display at the beginning
 string w_msg = "+======================================+\n"
@@ -114,10 +115,10 @@ const char make_const = '&';
 const char help = '!';
 // declaring roman numerals
 
-vector<string> roman_numerals {
+static vector<string> roman_numerals {
         "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"
 };
-vector<double> arabic_numerals {
+static vector<double> arabic_numerals {
         1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0
 };
 
@@ -131,8 +132,8 @@ double convert_roman_to_arabic (const string& s) {
 
 }
 
-const string prompt = "> ";
-const string result = "= ";
+static const string prompt = "> ";
+static const string result = "= ";
 
 // Token object
 struct Token {

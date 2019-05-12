@@ -3,6 +3,17 @@
 #include <limits.h>
 #include <unistd.h>
 
+/*
+ *  This program takes an input file reads the input format
+ *  and outputs the content in an output file with a different format like for eg:
+ *  { year 1992 { month jan (1 0 61.5) } { month feb (1 1 64)(2 2 65.2) } }
+ *  ----->
+ * Year:1992
+	Month:January
+		Day:1
+		Hour:0 		Temp:61.5
+ */
+
 const int not_a_reading = -7777;
 const int not_a_month = -1;
 
@@ -14,14 +25,7 @@ struct MyException : std::exception
     const char* what() const noexcept override { return "Buggers!"; }
 };
 
-// check current working directory
-string getexepath() {
-    char result[ PATH_MAX ];
-    ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
-    return std::string( result, (count > 0) ? count : 0 );
-}
-
-vector<string>month_input_tbl {
+static vector<string>month_input_tbl {
     "jan", "feb", "mar", "apr",
     "may", "jun", "jul", "aug",
     "sep", "oct", "nov", "dec"
@@ -39,7 +43,7 @@ int month_to_int (const string& s) {
     return -1;
 }
 
-vector<string> month_print_tbl = {
+static vector<string> month_print_tbl = {
         "January", "February", "March", "April",
         "May", "June", "July", "August",
         "September", "October", "November", "December"
@@ -225,14 +229,12 @@ void read_write_years(ifstream& ifs, ofstream& ofs) {
 
 int main() {
     // open an input file:
-    cout << "Please enter input file name\n";
     string iname = "../textfiles/input.txt"; // add / change to cin >> iname; if needed
     ifstream ifs {iname};
     if (!ifs) error ("can't open file name \n", iname);
     ifs.exceptions(ifs.exceptions()|ios_base::badbit);
 
     // open output file
-    cout << "Please enter output file name \n";
     string oname = "../textfiles/output.txt"; // add / change to cin >> oname; if needed
     ofstream ofs {oname};
     if (!ofs) error("can't open output file", oname);

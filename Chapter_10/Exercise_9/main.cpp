@@ -1,5 +1,10 @@
 #include "std_lib_facilities.h"
 
+/*
+ *  This Program reads 2 input files and outputs
+ *  the SORTED content of them into 1 single file
+ */
+
 void concat_2_files () {
 
     vector<string> first;
@@ -31,11 +36,9 @@ void concat_2_files () {
     while (ifs_1 >> a) {
         first.push_back(a);
     }
-    sort(first);
     while (ifs_2 >> b) {
         second.push_back(b);
     }
-    sort(second);
 
     // read, concatenate, and write files
     for (const string& x : first) {
@@ -50,6 +53,7 @@ void concat_2_files () {
     }
 }
 
+// RUN
 int main() {
     concat_2_files();
 }

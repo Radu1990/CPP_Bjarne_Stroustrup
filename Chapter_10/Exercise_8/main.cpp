@@ -1,5 +1,8 @@
 #include "std_lib_facilities.h"
-
+/*
+ *  This Program reads 2 input files and outputs
+ *  merges the content of them into 1 single file
+ */
 void concat_2_files () {
 
     string a;

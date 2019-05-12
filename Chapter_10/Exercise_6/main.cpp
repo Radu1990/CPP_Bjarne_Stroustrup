@@ -1,5 +1,13 @@
 #include "std_lib_facilities.h"
 
+
+/*
+ * This program defines a class Roman with input and output
+ * overloaded operators that print for eg:
+ * cout << "Roman " << x << " equals " << x.as_int() << endl;
+ * " Roman II equals 2 "
+*/
+
 class Roman_int {
 
 public:

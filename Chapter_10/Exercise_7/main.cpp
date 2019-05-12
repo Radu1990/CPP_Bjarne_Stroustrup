@@ -19,7 +19,7 @@
     This program implements a basic expression calculator.
     Input from cin; output to cout.
 
-    Accepts Roman numerals instead of Arabic numerals
+    This version accepts Roman numerals instead of Arabic numerals as-well
 
     The grammar for input is:
 

@@ -46,7 +46,7 @@ void f_5() {
     // ! oct, hex and dec stick for input as they do for output
 }
 
-void f_6(stringstream& aa) {
+void f_6(istream& aa, istream& bb) {
     cout << "Function 6 - Integer input:\n";
     // You can get >> to interpret the 0 and 0x prefixes by unsetting all the defaults.
     // The stream member function unsetf() clears the flag (or flags)
@@ -58,11 +58,11 @@ void f_6(stringstream& aa) {
     aa >> a >> hex >> b >> oct >> c >> d;
     cout << a << '\t' << b << '\t' << c << '\t' << d << '\n';
 
-    aa.unsetf(ios::dec);
-    aa.unsetf(ios::oct);
-    aa.unsetf(ios::hex);
+    bb.unsetf(ios::dec);
+    bb.unsetf(ios::oct);
+    bb.unsetf(ios::hex);
 
-    aa >> a >> b >> c >> d;
+    bb >> a >> b >> c >> d;
     cout << a << '\t' << b << '\t' << c << '\t' << d << '\n';
 
     // input: 1234 0x4d2 02322 02322

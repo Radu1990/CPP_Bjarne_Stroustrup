@@ -46,23 +46,21 @@ void f_5() {
     // ! oct, hex and dec stick for input as they do for output
 }
 
-void f_6(ifstream& aa) {
+void f_6(stringstream& aa) {
     cout << "Function 6 - Integer input:\n";
     // You can get >> to interpret the 0 and 0x prefixes by unsetting all the defaults.
     // The stream member function unsetf() clears the flag (or flags)
     // given as argument.
     int a,b,c,d;
 
-    //TODO create input.txt files for the functions with cin and pass these as arguments so that
-    // the googletest unittests work
-    // input: 1234 0x4d2 02322 02322
+    // input: 1234 4d2 2322 2322
     // output: 1234 1234 1234 1234
     aa >> a >> hex >> b >> oct >> c >> d;
     cout << a << '\t' << b << '\t' << c << '\t' << d << '\n';
 
-    cin.unsetf(ios::dec);
-    cin.unsetf(ios::oct);
-    cin.unsetf(ios::hex);
+    aa.unsetf(ios::dec);
+    aa.unsetf(ios::oct);
+    aa.unsetf(ios::hex);
 
     aa >> a >> b >> c >> d;
     cout << a << '\t' << b << '\t' << c << '\t' << d << '\n';

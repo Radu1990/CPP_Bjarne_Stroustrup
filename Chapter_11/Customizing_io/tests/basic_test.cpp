@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 #include "../custom_io.h"
-#include <istream>
-#include <iostream>
 
 TEST(testingCustom_io, test1) {
     f_1();
@@ -20,7 +18,20 @@ TEST(testingCustom_io, test5) {
     f_5();
 }
 TEST(testingCustom_io, test6) {
-//   f_6();
+    // First case:
+    // Input: 1234 4d2 2322 2322
+    std::stringstream ss_1;
+    ss_1 << "1234 4d2 2322 2322";
+    f_6(ss_1);
+    // Output: 1234 1234 1234 1234
+
+    // Second case:
+    // Input: 1234 0x4d2 02322 02322
+    std::stringstream ss_2;
+    ss_2 << "1234 0x4d2 02322 02322";
+    f_6(ss_2);
+    // Output: 1234 1234 1234 1234
+
 }
 TEST(testingCustom_io, test7) {
     f_7();

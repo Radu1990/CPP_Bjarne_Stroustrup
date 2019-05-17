@@ -9,6 +9,7 @@ void f_3();
 void f_4();
 void f_5();
 void f_6(istream& aa, istream& bb);
+void f_6_1();
 void f_7();
 void try_this_1();
 void f_8();

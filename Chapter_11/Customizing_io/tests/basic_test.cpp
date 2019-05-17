@@ -32,6 +32,17 @@ TEST(testingCustom_io, test6) {
 
 
 }
+
+TEST(testingCustom_io, test6_1) {
+
+    f_6_1();
+
+    // Output 1: 1234 1234 1234 1234
+    // Output 2: 1234 1234 1234 1234
+
+
+}
+
 TEST(testingCustom_io, test7) {
     f_7();
 }

@@ -208,5 +208,3 @@ void f_10(){
         ofs.write(as_bytes(x), sizeof(int)); // note: writing bytes
     }
 }
-
-

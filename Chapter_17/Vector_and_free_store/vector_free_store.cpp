@@ -21,13 +21,15 @@ public:
 };
 
 // 17.3 Memory, addresses, and pointers
-int x = 17;
-int *pi = &x; // pointer to int
 
-double e = 2.71828;
-double *pd = &e; // pointer to double
 
 void f_1() {
+    int x = 17;
+    int *pi = &x; // pointer to int
+
+    double e = 2.71828;
+    double *pd = &e; // pointer to double
+
     cout << "\n";
     cout << "pi==" << pi << "; contents of pi==" << *pi << "\n";
     cout << "pd==" << pd << "; contents of pd==" << *pd << "\n";
@@ -377,3 +379,27 @@ void f_19(void* pv){
 
 // 17.9 Pointers and references
 
+void f_20(){
+    int x = 10;
+    int* p = &x; // you need & to get a pointer
+    *p = 7; // use * to assign to x through p
+    int x2 = *p; // read x through p and assign to x2
+    int* p2 = &x2; // get a pointer to another int
+    p2 = p; // p2 and p both point to x
+    p = &x2; // make p point to another object
+
+    // The corresponding example for references is:
+
+    int y = 10;
+    int& r = y; // the & is in the type, not in the initializer
+    r = 7; // assign to y through r (no * needed)
+    int y2 = r; // read y through r (no * needed) and assign to y2
+    int& r2 = y2; // get a reference to another int
+    r2 = r; // the value of y is assigned to y2
+//    r = &y2; // error: you can't change the value of a reference
+               // ( no assignment of an int* to an int&)
+
+
+}
+
+// 17.9.1 Pointer and reference parameters

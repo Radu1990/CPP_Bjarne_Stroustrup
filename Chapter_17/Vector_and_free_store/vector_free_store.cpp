@@ -4,6 +4,9 @@
 // This program includes the Theory from
 // Chapter 17: Vector and Free Store
 
+// 17.1 Introduction
+
+// 17.2 Vector Basics
 // a very simplified vector of doubles (like vector<double>)
 class vector_v2 {
     int sz; // the size
@@ -17,7 +20,7 @@ public:
     int size() const { return sz; } // the current size
 };
 
-// Memory, addresses, and pointers
+// 17.3 Memory, addresses, and pointers
 int x = 17;
 int *pi = &x; // pointer to int
 
@@ -30,7 +33,7 @@ void f_1() {
     cout << "pd==" << pd << "; contents of pd==" << *pd << "\n";
 }
 
-// The sizeof operator
+// 17.3.1 The sizeof operator
 void sizes(char ch, int i, int *p, bool b, double d) {
     cout << "the size of char is " << sizeof(char) << " or " << sizeof(ch) << " bytes\n";
     cout << "the size of int is " << sizeof(int) << " or " << sizeof(i) << " bytes\n";
@@ -58,7 +61,8 @@ void f_3() {
     cout << "the size of vector<int>v(1000) is " << sizeof(v) << "\n";
 }
 
-// Free store allocation and pointers
+// 17.4 Free store and pointers
+// 17.4.1 Free-store allocation
 void f_4() {
     /*
      * Memory layout:
@@ -75,7 +79,7 @@ void f_4() {
 //    pd = pi; // error: can't assign an int* to a double*
 }
 
-// Access through pointers
+// 17.4.2 Access through pointers
 void f_5() {
     auto p = new double[4]; // allocate 4 doubles on the free store
     double x = *p;          // read the first object pointed to by p
@@ -104,7 +108,7 @@ void f_7() {
     double y = p[0]; // p[0] is the same as *p
 }
 
-// Ranges
+// 17.4.3 Ranges
 void f_8(){
     // The major problem with pointers is that a pointer
     // doesn't know how many elements it points to
@@ -130,7 +134,7 @@ void f_9(){
 // Understanding pointers is essential for understanding
 // lots of real-world code
 
-// Initialization
+// 17.4.4 Initialization
 
 void f_10(){
     double* p0;  // uninitialized: likely trouble
@@ -159,7 +163,7 @@ void f_10(){
 
 }
 
-// The null pointer
+// 17.4.5 The null pointer
 
 void f_11(){
     double* p0 = nullptr;
@@ -176,7 +180,7 @@ void f_11(){
     }
 }
 
-// Free-store deallocation
+// 17.4.6 Free-store deallocation
 
 // The new operator allocates ("gets") memory from the free store.
 // Memory is limited so we should also return memory to the free store.
@@ -203,7 +207,11 @@ void f_12(){
 
 // the operator for returning memory to the free store is called delete.
 
-// Destructors
+// 17.5 Destructors
+// 17.5.1 Generated destructors
+
+// If a member of a class has a destructor, then that destructor
+// will be called when the object containing the member is destroyed.
 
 // a very simplified vector of doubles
 class vector_v3 {
@@ -229,6 +237,7 @@ public:
     }
     // ...
 };
+// 17.5.2 Destructors and free store
 
 void f_13(int n) {
     auto p = new double[n]; // allocate n doubles ---> useless now
@@ -273,7 +282,7 @@ void f_14() {
     // 3. expect to see the print messages for Constructor and Destructor
 }
 
-// Access to elements
+// 17.6 Access to elements
 
 class vector_v4{
 private:
@@ -313,7 +322,7 @@ void f_15(){
     }
 }
 
-// Pointers to class objects
+// 17.7 Pointers to class objects
 // We can point to just about anything we can place in memory.
 // eg. vectors, chars...etc.
 
@@ -346,7 +355,7 @@ void f_17(){
     double d_2 = p->get(3);
 }
 
-// Messing with types: void* and casts
+// 17.8 Messing with types: void* and casts
 
 void f_18(){
     // The type void* means "pointer to some memory the compiler
@@ -365,4 +374,6 @@ void f_19(void* pv){
 //    pv[2] = 9; // error: cannot subscript a void*
     int * pi = static_cast<int*>(pv); // OK: explicit conversion
 }
+
+// 17.9 Pointers and references
 

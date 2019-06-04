@@ -283,10 +283,12 @@ public:
     explicit vector_v4(int s)
     :sz{s}, elem{new double[s]} { // constructor
         // ...
+        cout << "\n >>> Constructor for A was called <<<\n";
     }
 
     ~vector_v4() { // destructor
         delete[] elem;
+        cout << "\n >>> Destructor for A was called <<<\n";
     }
 
     int size() const { // the current size
@@ -312,4 +314,55 @@ void f_15(){
 }
 
 // Pointers to class objects
+// We can point to just about anything we can place in memory.
+// eg. vectors, chars...etc.
+
+vector_v4* some_func(int s){
+    auto p = new vector_v4(s); // allocate a vector on free store
+    // fill *p
+    return p;
+}
+
+void f_16(){
+    vector_v4* q = some_func(4);
+    // use *q
+    delete q; // free vector on free store
+    // when we delete a vector
+    // its destructor is called
+}
+
+void f_17(){
+    // note that all classes support the operator . (dot)
+    // for accessing members, given the name of an object:
+    vector_v4 v(4);
+    int x = v.size();
+    double d = v.get(3);
+
+    // similary all classes support the operator -> (arrow)
+    // for accessing members, given a pointer to an object:
+
+    auto p = new vector_v4(4);
+    int x_2 = p->size();
+    double d_2 = p->get(3);
+}
+
+// Messing with types: void* and casts
+
+void f_18(){
+    // The type void* means "pointer to some memory the compiler
+    // doesn't know the type of."
+    void* pv1 = new int; // OK: int* converts to void*
+    void* pv2 = new double[10]; // OK: double* converts to void*
+}
+
+void f_19(void* pv){
+    // since the compiler doesn't know
+    // what a void* points to, we must tell it:
+    void* pv2 = pv; // copying is OK (copying is what void*s are for)
+//    double* pd = pv; // error: can not convert void to double
+//    *pv = 7; // error: can not dereference a void
+               // (we don't know what type of object it points to)
+//    pv[2] = 9; // error: cannot subscript a void*
+    int * pi = static_cast<int*>(pv); // OK: explicit conversion
+}
 

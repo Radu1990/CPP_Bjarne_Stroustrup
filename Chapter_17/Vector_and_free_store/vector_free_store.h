@@ -9,5 +9,6 @@ void f_3();
 void f_12();
 void f_14();
 void f_15();
+void f_16();
 
 #endif // THIS_CUSTOM_IO_H

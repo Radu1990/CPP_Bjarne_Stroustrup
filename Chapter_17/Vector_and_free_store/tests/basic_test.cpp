@@ -12,3 +12,15 @@ TEST(testingVector_free_store, f_2) {
 TEST(testingVector_free_store, f_3) {
     f_3();
 }
+
+TEST(testingVector_free_store, f_12) {
+    f_12();
+}
+
+TEST(testingVector_free_store, f_14) {
+    f_14();
+}
+
+TEST(testingVector_free_store, f_15) {
+    f_15();
+}

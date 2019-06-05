@@ -403,3 +403,95 @@ void f_20(){
 }
 
 // 17.9.1 Pointer and reference parameters
+
+// when you want to change the value of a variable
+// to a value computed by a function you have 3 options:
+
+// compute a new value and return it
+int incr_v(int x) {
+    return x+1;
+}
+
+// pass a pointer (dereference it and increment the result)
+void incr_p(int* p) {
+    ++*p;
+}
+
+// pass a reference
+void incr_r(int& r) {
+    ++r;
+}
+
+// 17.9.2 Pointers, references, and inheritance
+
+// Circle is a derived class from Shape
+// a Circle* can be implicitly converted to a Shape*
+// because Shape is a public base of Circle
+struct Shape{};
+struct Circle: Shape {};
+void rotate(Shape* s, int n); // rotate *s n degrees
+
+//void f_21(){
+//    auto p = new Circle;
+//    Circle c;
+//    rotate(p, 35);
+//    rotate(&c, 45);
+//}
+
+// similarly for references
+void rotate_2(Shape& s, int n); // rotate s n degrees
+
+//void f_22(){
+//    auto p = new Circle;
+//    Circle c;
+//    Shape& r = c;
+//    rotate_2(r, 55);
+//    rotate_2(*p, 65);
+//    rotate_2(c, 75);
+//}
+
+// 17.9.3 An example: lists
+struct Link {
+    string value;
+    Link* prev;
+    Link* succ;
+    // we use nullptr to indicate that a Link
+    // doesn't have a successor or a predecessor
+public:
+    explicit Link(string v, Link* p = nullptr, Link* s = nullptr) // constructor
+    :value{std::move(v)}, prev{p}, succ{s} {}
+
+};
+
+Link* insert(Link* p, Link* n){
+    if (n== nullptr) return p;
+    if (p== nullptr) return n;
+    n->succ = p; // p comes after n
+    if (p->prev) {
+        p->prev->succ = n;
+    }
+
+    p->prev->succ = n; // n comes after what used to be p's predecessor
+    n->prev = n; // n becomes p's predecessor
+    return n;
+}
+
+void f_23(){
+    // we can build our list like this
+    Link* norse_gods = new Link{"Thor"};
+    norse_gods = new Link{"Odin", nullptr, norse_gods};
+    // this notation means get ng's succ and then that succ's prev and write in there the new link
+    norse_gods->succ->prev = norse_gods;
+    // this way both links point to each-other
+    norse_gods = new Link{"Freia", nullptr, norse_gods};
+    norse_gods->succ->prev = norse_gods; // same here
+}
+
+void f_24(){
+    Link* norse_gods = new Link{"Thor"};
+    norse_gods = insert(norse_gods, new Link{"Odin"});
+    norse_gods = insert(norse_gods, new Link{"Freia"});
+}
+
+
+

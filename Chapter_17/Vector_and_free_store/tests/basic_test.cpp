@@ -28,3 +28,7 @@ TEST(testingVector_free_store, f_15) {
 TEST(testingVector_free_store, f_16) {
     f_16();
 }
+
+TEST(testingVector_free_store, f_24) {
+    f_24();
+}

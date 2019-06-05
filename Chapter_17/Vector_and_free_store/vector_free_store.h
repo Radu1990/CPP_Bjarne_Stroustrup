@@ -10,5 +10,6 @@ void f_12();
 void f_14();
 void f_15();
 void f_16();
+void f_24();
 
 #endif // THIS_CUSTOM_IO_H

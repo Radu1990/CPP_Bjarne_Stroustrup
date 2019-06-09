@@ -553,3 +553,137 @@ Link* advance(Link* p, int n){
     }
     return p;
 }
+
+// 17.9.5 List use
+
+void print_all(Link* p) {
+    cout << "{";
+    while(p) {
+        cout << p->value;
+        if (p==p->succ) {
+            cout << ", ";
+        }
+    }
+    cout << " }";
+}
+
+// let's build two lists:
+
+void f_25(){
+    Link* norse_gods = new Link{"Thor"};
+    norse_gods = insert(norse_gods, new Link{"Odin"});
+    norse_gods = insert(norse_gods, new Link{"Zeus"});
+    norse_gods = insert(norse_gods, new Link{"Freia"});
+
+    Link* greek_gods = new Link{"Hera"};
+    greek_gods = insert(greek_gods, new Link{"Athena"});
+    greek_gods = insert(greek_gods, new Link{"Mars"});
+    greek_gods = insert(greek_gods, new Link{"Poseidon"});
+
+    Link* p = find(greek_gods, "Mars");
+    if (p) p->value = "Ares";
+
+    Link* q = find(norse_gods, "Zeus");
+
+    if (q) {
+        if (q == norse_gods) {
+            norse_gods = q->succ;
+        }
+        erase(q);
+        greek_gods = insert(greek_gods, q);
+    }
+
+    cout << "\n";
+    print_all(norse_gods);
+    cout << "\n";
+    print_all(greek_gods);
+    cout << "\n";
+}
+// 17.10 The "this" pointer
+
+class Link2 {
+public:
+    string value;
+    explicit Link2(string v, Link2* p = nullptr, Link2* s = nullptr)
+    :value{std::move(v)}, prev{p}, succ{s} { }
+
+    Link2* insert(Link2* n); // insert n before this object
+    Link2* add(Link2* n); // add n after this object
+    Link2* erase(); // remove this object from list
+    Link2* find(const string& s); // find s in list
+
+    const Link2* find(const string& s) const; // find s in const list
+
+    Link2* advance(int n) const; // move n positions in list
+
+    Link2* next() const {
+        return succ;
+    }
+
+    Link2* previous() const {
+        return prev;
+    }
+
+private:
+    Link2* succ;
+    Link2* prev;
+};
+
+Link2* Link2::insert(Link2* n){ // insert n before this object
+    if (n== nullptr) return this; // nothing to insert
+    if (this==nullptr) return n;
+    n->succ = this; // p comes after n
+    if (prev) {
+        prev->succ = n;
+    }
+    n->prev = prev; // p's predecessor becomes n's predecessor
+    prev = n; // n becomes p's predecessor
+    return n;
+}
+
+// 17.10.1 More link use
+
+void print_all_lists(Link2* p){
+    cout << "{ ";
+    while(p) {
+        cout << p->value;
+        if(p==p->next()){
+            cout <<", ";
+        }
+    }
+    cout << "}";
+}
+
+void f_26(){
+    // create lists
+    Link2* norse_gods = new Link2{"Thor"};
+    norse_gods = norse_gods->insert(new Link2{"Odin"});
+    norse_gods = norse_gods->insert(new Link2{"Zeus"});
+    norse_gods = norse_gods->insert(new Link2{"Freia"});
+
+    Link2* greek_gods = new Link2{"Hera"};
+    greek_gods = greek_gods->insert(new Link2{"Athena"});
+    greek_gods = greek_gods->insert(new Link2{"Mars"});
+    greek_gods = greek_gods->insert(new Link2{"Poseidon"});
+
+    // correct the name of the god war
+    Link2* p = greek_gods->find("Mars");
+    if (p) p->value = "Ares";
+
+    // move Zeus into his correct Pantheon
+    Link2* p2 = norse_gods->find("Zeus");
+    if (p2) {
+        if (p2 == norse_gods) {
+            norse_gods = p2->next();
+        }
+        p2->erase();
+        greek_gods = greek_gods->insert(p2);
+    }
+
+    // print out the lists
+    cout << "\n";
+    print_all_lists(norse_gods);
+    cout << "\n";
+    print_all_lists(greek_gods);
+    cout << "\n";
+}

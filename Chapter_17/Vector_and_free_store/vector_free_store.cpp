@@ -457,10 +457,8 @@ struct Link {
     Link* succ;
     // we use nullptr to indicate that a Link
     // doesn't have a successor or a predecessor
-public:
     explicit Link(string v, Link* p = nullptr, Link* s = nullptr) // constructor
     :value{std::move(v)}, prev{p}, succ{s} {}
-
 };
 
 Link* insert(Link* p, Link* n){
@@ -493,5 +491,65 @@ void f_24(){
     norse_gods = insert(norse_gods, new Link{"Freia"});
 }
 
+// 17.9.4 List operations
 
+Link* add(Link* p, Link* n) { // insert n after p, return n
+    if (n== nullptr) return p;
+    if (p== nullptr) return n;
+    p->succ = n; // n comes after p
+    if(n->prev) {
+        n->prev->succ=p;
+    }
+    p->prev = n->prev;
+    n->prev = p;
+    return n;
+}
 
+Link* erase(Link* p) { // remove *p from list; return p's successor
+    if (p==nullptr){
+        return nullptr;
+    }
+    if (p->succ) {
+        p->succ->prev = p->prev;
+    }
+    if (p->prev) {
+        p->prev->succ = p->succ;
+    }
+    return p->succ;
+}
+
+Link* find(Link* p, const string& s){ // find s in list; return nullptr for "not found"
+    while (p) {
+        if (p->value == s) {
+            return p;
+        }
+        p = p->succ;
+    }
+    return nullptr;
+}
+
+Link* advance(Link* p, int n){
+    // move n positions in list
+    // return nullptr for "not found"
+    // positive n moves forward, negative backward
+    if (p== nullptr) {
+        return nullptr;
+    }
+    if (0<n) {
+        while (n--) {
+            if (p->succ == nullptr) {
+                return nullptr;
+            }
+            p = p->succ;
+        }
+    }
+    else if (n<0) {
+        while (n++) {
+            if (p->prev == nullptr) {
+                return nullptr;
+            }
+            p = p->prev;
+        }
+    }
+    return p;
+}

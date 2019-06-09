@@ -18,7 +18,7 @@ void f_1(){
     // 3. Deallocate that array (using delete[])
     delete[] p;
 
-    ostream ost;
+    ostream ost ;
 
 
 }

@@ -24,3 +24,11 @@ TEST(testingVector_free_store, f_5) {
     ss << "abdc2@[h!eA";
     f_5(ss);
 }
+
+TEST(testingVector_free_store, f_6) {
+    f_6();
+}
+
+TEST(testingVector_free_store, f_7) {
+    f_7();
+}

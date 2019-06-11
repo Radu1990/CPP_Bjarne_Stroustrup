@@ -186,3 +186,134 @@ void f_5(istream& is){
         }
     }
 }
+
+// 9. Which way does the stack grow: up (towards higher addresses) or down?
+// Same for the heap (free store). Write a program to determine the answers.
+
+void f_6(){
+    // declaring pointers -> memory allocated on the stack
+    int v{0};
+    int w{0};
+    int x{0};
+    int y{0};
+    int z{0};
+
+    int* pv = &v;
+    int* pw = &w;
+    int* px = &x;
+    int* py = &y;
+    int* pz = &z;
+
+    // declaring pointers with "new" -> allocating memory on the heap
+    int* pa = new int;
+    int* pb = new int;
+    int* pc = new int;
+    int* pd = new int;
+    int* pe = new int;
+
+    // printing pointer addresses
+    cout << "\n";
+    cout << ">>> Printing addresses of pointers allocated on the stack\n";
+    cout << "pv =\t" << pv << "\n";
+    cout << "pw =\t" << pw << "\n";
+    cout << "px =\t" << px << "\n";
+    cout << "py =\t" << py << "\n";
+    cout << "pz =\t" << pz << "\n";
+
+    cout << "\n";
+
+    cout << "Printing addresses of pointers allocated on the heap (free store)\n";
+    cout << "pa =\t" << pa << "\n";
+    cout << "pb =\t" << pb << "\n";
+    cout << "pc =\t" << pc << "\n";
+    cout << "pd =\t" << pd << "\n";
+    cout << "pe =\t" << pe << "\n";
+
+}
+
+// 11. Complete the "list of gods example from 17.10.1 and run it.
+
+class Link2 {
+public:
+    string value;
+    explicit Link2(string v, Link2* p = nullptr, Link2* s = nullptr)
+            :value{std::move(v)}, prev{p}, succ{s} { }
+
+    Link2* insert(Link2* n); // insert n before this object
+    Link2* add(Link2* n); // add n after this object
+    Link2* erase(); // remove this object from list
+    Link2* find(const string& s); // find s in list
+
+    const Link2* find(const string& s) const; // find s in const list
+
+    Link2* advance(int n) const; // move n positions in list
+
+    Link2* next() const {
+        return succ;
+    }
+
+    Link2* previous() const {
+        return prev;
+    }
+
+private:
+    Link2* succ;
+    Link2* prev;
+};
+
+Link2* Link2::insert(Link2* n){ // insert n before this object
+    if (n== nullptr) return this; // nothing to insert
+    if (this==nullptr) return n;
+    n->succ = this; // p comes after n
+    if (prev) {
+        prev->succ = n;
+    }
+    n->prev = prev; // p's predecessor becomes n's predecessor
+    prev = n; // n becomes p's predecessor
+    return n;
+}
+
+void print_all_lists(Link2* p){
+    cout << "{ ";
+    while(p) {
+        cout << p->value;
+        if(p==p->next()){
+            cout <<", ";
+        }
+    }
+    cout << "}";
+}
+
+void f_7(){
+    // create lists
+    Link2* norse_gods = new Link2{"Thor"};
+    norse_gods = norse_gods->insert(new Link2{"Odin"});
+    norse_gods = norse_gods->insert(new Link2{"Zeus"});
+    norse_gods = norse_gods->insert(new Link2{"Freia"});
+
+    Link2* greek_gods = new Link2{"Hera"};
+    greek_gods = greek_gods->insert(new Link2{"Athena"});
+    greek_gods = greek_gods->insert(new Link2{"Mars"});
+    greek_gods = greek_gods->insert(new Link2{"Poseidon"});
+
+    // correct the name of the god war
+    Link2* p = greek_gods->find("Mars");
+    if (p) p->value = "Ares";
+
+    // move Zeus into his correct Pantheon
+    Link2* p2 = norse_gods->find("Zeus");
+    if (p2) {
+        if (p2 == norse_gods) {
+            norse_gods = p2->next();
+        }
+        p2->erase();
+        greek_gods = greek_gods->insert(p2);
+    }
+
+    // print out the lists
+    cout << "\n";
+    print_all_lists(norse_gods);
+    cout << "\n";
+    print_all_lists(greek_gods);
+    cout << "\n";
+}

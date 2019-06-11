@@ -13,26 +13,26 @@
 
 // 3. write void to_lower without any std library functions
 
-void to_lower(char* s){
+void to_lower(char* s){ // convert any uppercase char to lowercase
     if (isupper(*s)) {
         *s = tolower(*s);
     }
 }
 
-void f_1(){
-    char myString[] = "It's Already, Too Late"; // char array
-
+void f_1_char_to_lower(char*& string, int str_size){
+    // passing reference
+    char myStr[str_size];
+    strcpy(myStr, string);
 
     // printing input
-    cout << "\nInput: " << myString << endl;
+    cout << "\nInput: " << myStr << endl;
 
     int next_val{0}; // iterator for chars inside char array
-    int length = sizeof(myString); // size of char array
 
     // printing converted output
     cout << "Output: ";
-    for (int i=0; i<length; ++i) {
-        char* p = (myString + next_val); // creating a new pointer every iteration
+    for (int i=0; i<str_size; ++i) {
+        char* p = (myStr + next_val); // creating a new pointer every iteration
         if (*p == 0) { // checking if we reached the end of the char array
             return;    // and returning if end
         }
@@ -41,3 +41,12 @@ void f_1(){
         next_val++;
     }
 }
+
+void f_1() {
+    char myString[] = "It's Already, Too Late - Elon Musk"; // C-Style string
+    char* p = myString; // pointer to C-Style string
+    int length = sizeof(myString); // size of char array
+
+    f_1_char_to_lower(p, length);
+}
+

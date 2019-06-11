@@ -135,5 +135,54 @@ void f_3(){
 
     delete[]p1;
     delete[]p2;
+}
 
+// 6. Memory exhaustion
+
+// 7. Write a program that reads characters from cin into an array that
+// you allocate on the heap (free store).
+
+// Read individual characters until an exclamation mark (!)
+// is entered. Do not use std::string. Do not worry about Memory Exhaustion
+
+void f_4(istream& is){
+    vector <char> characters;
+    auto p = new char;
+    cout << endl;
+
+    while (true) {
+        // quit if EOF
+        if(!(is >> *p)) {
+            cout << "\n >>> End of File! <<<\n";
+            break;
+        }
+        // quit if '!' entered
+        if (*p == '!') {
+            cout << "\n >>> Character '!' entered <<<\n";
+            break;
+        }
+        // add char to vector
+        characters.push_back(*p);
+    }
+    delete p;
+}
+
+// 8. Do ex. 7 again but this time read into a std::string rather than to memory
+
+void f_5(istream& is){
+    string s{};
+    cout << endl;
+
+    while (true) {
+        // quit if EOF
+        if(!(is >> s)) {
+            cout << "\n >>> End of File! <<<\n";
+            break;
+        }
+        // quit if '!' entered
+        if (s == "!") {
+            cout << "\n >>> Character '!' entered <<<\n";
+            break;
+        }
+    }
 }
